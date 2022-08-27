@@ -1,0 +1,14 @@
+import type { ErrorRequestHandler } from "express";
+
+const errorHandlerMiddleware: ErrorRequestHandler = async (
+  err,
+  req,
+  res,
+  next
+) => {
+  console.log(err);
+  return res
+    .status(500)
+    .json({ msg: "Something went wrong, please try again" });
+};
+export default errorHandlerMiddleware;
