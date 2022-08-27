@@ -7,7 +7,8 @@ const getAlProductsStatic: RequestHandler = async (req, res) => {
   //   name: { $regex: search, $options: "i" },
   // });
 
-  const products = await Product.find({}).sort("-name -price");
+  // const products = await Product.find({}).sort("-name -price");
+  const products = await Product.find({}).select("name price");
   res.status(200).json({ products });
 };
 
@@ -18,7 +19,7 @@ interface QueryObject {
 }
 
 const getAllProducts: RequestHandler = async (req, res) => {
-  const { featured, company, name, sort } = req.query;
+  const { featured, company, name, sort, fields } = req.query;
   const queryObject: QueryObject = {};
 
   if (featured) {
@@ -39,6 +40,10 @@ const getAllProducts: RequestHandler = async (req, res) => {
     result = result.sort(sortList);
   } else {
     result = result.sort("createdAt");
+  }
+  if (fields) {
+    const fieldsList = (fields as string).split(",").join(" ");
+    result = result.select(fieldsList);
   }
   const products = await result;
   res.status(200).json({ products });
