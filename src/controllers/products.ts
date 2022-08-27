@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 
 const getAlProductsStatic: RequestHandler = async (req, res) => {
+  throw new Error("testing async Error");
   res.status(200).json({ msg: "products testing route" });
 };
 
