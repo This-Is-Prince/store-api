@@ -2,10 +2,12 @@ import { RequestHandler } from "express";
 import Product from "../models/product";
 
 const getAlProductsStatic: RequestHandler = async (req, res) => {
-  const search = "ab";
-  const products = await Product.find({
-    name: { $regex: search, $options: "i" },
-  });
+  // const search = "ab";
+  // const products = await Product.find({
+  //   name: { $regex: search, $options: "i" },
+  // });
+
+  const products = await Product.find({}).sort("-name -price");
   res.status(200).json({ products });
 };
 
@@ -16,7 +18,7 @@ interface QueryObject {
 }
 
 const getAllProducts: RequestHandler = async (req, res) => {
-  const { featured, company, name } = req.query;
+  const { featured, company, name, sort } = req.query;
   const queryObject: QueryObject = {};
 
   if (featured) {
@@ -28,9 +30,17 @@ const getAllProducts: RequestHandler = async (req, res) => {
   if (name) {
     queryObject.name = { $regex: name as string, $options: "i" };
   }
-  console.log(queryObject);
 
-  const products = await Product.find(queryObject);
+  // console.log(queryObject);
+
+  let result = Product.find(queryObject);
+  if (sort) {
+    const sortList = (sort as string).split(",").join(" ");
+    result = result.sort(sortList);
+  } else {
+    result = result.sort("createdAt");
+  }
+  const products = await result;
   res.status(200).json({ products });
 };
 
