@@ -4,7 +4,8 @@
   "main": "dist/index.js",
   "scripts": {
     "watch": "tsc -w",
-    "start": "nodemon dist/app.js"
+    "start": "nodemon dist/app.js",
+    "dev": "node dist/app.js"
   },
   "repository": "https://github.com/This-Is-Prince/store-api.git",
   "author": "This-Is-Prince <this.is.kumar.prince@gmail.com>",
